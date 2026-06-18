@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db";
 import Navbar from "@/components/Navbar";
