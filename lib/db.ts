@@ -1,42 +1,46 @@
-import Dexie, { Table } from "dexie";
+import Dexie, { type Table } from 'dexie';
 
+// --- DATABASE INTERFACE LAYERS ---
 export interface Product {
-    id?: number;
-    name: string;
-    stock: number;
-    unit: "piece" | "kg";
-    purchasePrice: number;
-    sellingPrice: number;
+  id?: number;
+  name: string;
+  price: number;
+  stock: number;
+  unit: string; // kg, packet, piece, liter, etc.
 }
 
-export interface Customer {
-    id?: number;
-    name: string;
-    totalSpent: number;
+export interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  qty: number;
+  unit: string;
 }
 
 export interface Sale {
-    id: string;
-    total: number;
-    customerId?: string;
-    customerName?: string;
-    customerPhone?: string;
+  id?: number;
+  customerName: string;
+  customerPhone: string;
+  items: CartItem[];
+  total: number;
+  date: string; // ISO String timestamp or date string
 }
 
-class GroceryDB extends Dexie {
-    products!: Table<Product, number>;
-    customers!: Table<Customer, number>;
-    sales!: Table<Sale, number>;
+// --- DEXIE LOCAL DATABASE ENGINE CLASS ---
+class MithapurGroceryDatabase extends Dexie {
+  products!: Table<Product>;
+  sales!: Table<Sale>;
 
-    constructor() {
-        super("groceryDB");
-
-        this.version(1).stores({
-            products: "++id, name, stock",
-            customers: "++id, name",
-            sales: "++id, date",
-        });
-    }
+  constructor() {
+    super('MithapurGroceryDB');
+    
+    // Define structural index paths for rapid querying
+    this.version(1).stores({
+      products: '++id, name, price, stock',
+      sales: '++id, customerName, customerPhone, date, total'
+    });
+  }
 }
 
-export const db = new GroceryDB();
+// Export a single optimized database singleton reference connection
+export const db = new
