@@ -16,9 +16,11 @@ export interface Customer {
 }
 
 export interface Sale {
-    id?: number;
+    id: string;
     total: number;
-    date: string;
+    customerId?: string;
+    customerName?: string;
+    customerPhone?: string;
 }
 
 class GroceryDB extends Dexie {
