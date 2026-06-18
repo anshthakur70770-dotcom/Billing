@@ -79,7 +79,7 @@ export default function InventoryPage() {
 
         try {
             await db.products.add({
-                name: name.strip ? name.strip() : name,
+                name: name.trim(),
                 price: parseFloat(price),
                 stock: parseFloat(stock),
                 unit: unit
